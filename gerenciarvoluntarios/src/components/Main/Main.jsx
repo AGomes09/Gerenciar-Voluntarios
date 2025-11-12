@@ -1,63 +1,7 @@
-import { Container, FormCheck } from "react-bootstrap";
+import { Container } from "react-bootstrap";
+import Formulario from "../Formulario/Formulario.jsx";
 import "bootstrap-icons/font/bootstrap-icons.css";
-import Form from "react-bootstrap/Form";
-import Button from "react-bootstrap/Button";
 import "./main.css";
-
-function Formulario() {
-  return (
-    <Container className="container-form">
-      <Form>
-        <Form.Group>
-          <h3 className="titulo-form">Dados do Voluntário</h3>
-        </Form.Group>
-        <Form.Group className="mb-1">
-          <Form.Label>Nome</Form.Label>
-          <Form.Control type="text" />
-        </Form.Group>
-
-        <Form.Group className="mb-1">
-          <Form.Label>CPF</Form.Label>
-          <Form.Control type="text" />
-        </Form.Group>
-
-        <Form.Group className="mb-1">
-          <Form.Label>Telefone</Form.Label>
-          <Form.Control type="text" />
-        </Form.Group>
-
-        <Form.Group className="mb-2" controlId="exampleForm.ControlInput1">
-          <Form.Label>Email address</Form.Label>
-          <Form.Control type="email" placeholder="joao@gmail.com" />
-        </Form.Group>
-
-        <Form.Group className="mb-1" controlId="ControlTextarea">
-          <Form.Label>Example textarea</Form.Label>
-          <Form.Control as="textarea" rows={3} />
-        </Form.Group>
-
-        <Form.Group>
-          <FormCheck
-            type="checkbox"
-            label="Aceito receber comunicados por e-mail"
-          ></FormCheck>
-          <FormCheck
-            type="checkbox"
-            label="Li e concordo com os Termos de Voluntário"
-          ></FormCheck>
-        </Form.Group>
-        <div className="opcao-form">
-          <Button type="reset" variant="danger" className="btn-form">
-            Cancelar
-          </Button>
-          <Button type="submit" variant="success" className="btn-form">
-            Enviar
-          </Button>
-        </div>
-      </Form>
-    </Container>
-  );
-}
 
 function Main() {
   return (
