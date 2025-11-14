@@ -1,17 +1,40 @@
-import Header from "./components/Header/Header.jsx";
-import Main from "./components/Main/Main.jsx";
-import Footer from "./components/Footer/Footer.jsx";
+import { BrowserRouter, Routes, Route, Link } from "react-router-dom";
+import Header from "src/components/Header/Header.jsx";
+import Footer from "src/components/Footer/Footer.jsx";
+import CadastroDeVoluntarios from "./pages/CadastroDeVoluntarios/CadastroDeVoluntarios.jsx";
+
 import "./app.css";
+
 function App() {
   return (
-    <div className="d-flex flex-column min-vh-100">
+    <BrowserRouter>
       <Header />
+      <nav className="navbar navbar-expand-lg navbar-dark bg-dark">
+        <div className="container">
+          <Link className="navbar-brand" to="/">
+            Home
+          </Link>
+          <div className="navbar-nav">
+            <Link className="nav-link" to="/cadastrodevoluntarios">
+              Cadastro de Voluntários
+            </Link>
+          </div>
+        </div>
+      </nav>
 
-      <main className="flex-grow-1">
-        <Main />
-      </main>
+      <Routes>
+        <Route path="/" element={<div>Ola</div>} />
+        <Route
+          path="/cadastrodevoluntarios"
+          element={<CadastroDeVoluntarios />}
+        />
+        <Route
+          path="/cadastrodevoluntarios/editar/:id"
+          element={<CadastroDeVoluntarios />}
+        />
+      </Routes>
       <Footer />
-    </div>
+    </BrowserRouter>
   );
 }
 
