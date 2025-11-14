@@ -1,0 +1,15 @@
+/* O Main cresce e empurra o footer pro fim */
+main {
+  flex: 1;
+}
+
+.btn-lista-voluntarios {
+  color: #fff;
+  background: #7bb1e2;
+}
+
+.btn-lista-voluntarios:hover {
+  color: #7bb1e2;
+  background: #fff;
+  border: 1px solid #7bb1e2;
+}

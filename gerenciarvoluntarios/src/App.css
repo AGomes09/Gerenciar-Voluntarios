@@ -5,15 +5,3 @@ body,
   height: 100%;
   margin: 0;
 }
-
-/* O container principal vai empurrar o footer pra baixo */
-.app {
-  display: flex;
-  flex-direction: column;
-  min-height: 100vh;
-}
-
-/* O Main cresce e empurra o footer pro fim */
-main {
-  flex: 1;
-}
