@@ -9,6 +9,7 @@ function Formulario() {
   const isEdit = !!id;
 
   const [formData, setFormData] = useState({
+    id: null,
     nome: "",
     cpf: "",
     email: "",
@@ -17,14 +18,16 @@ function Formulario() {
 
   const [errors, setErrors] = useState({});
   useEffect(() => {
-    const mockData = {
-      nome: "Adriano",
-      cpf: "400.200.100-99",
-      email: "adriano@gmail.com",
-      telefone: "1499830-7893",
-    };
     if (isEdit) {
-      setFormData(mockData);
+      const dados = JSON.parse(localStorage.getItem("voluntarios"));
+      if (dados.length) {
+        const findVoluntario = dados.find((voluntario) => {
+          return Number(voluntario.id) === Number(id);
+        });
+        if (findVoluntario) {
+          setFormData(findVoluntario);
+        }
+      }
     }
   }, [id, isEdit]);
 
@@ -41,8 +44,11 @@ function Formulario() {
 
   const validarFormulario = () => {
     const novosErros = {};
+    if (!formData.id) {
+      novosErros.nome = "Digite o id";
+    }
     if (!formData.nome || formData.nome.length < 3) {
-      novosErros.nome = "Digite o nome correto SEU BURRO";
+      novosErros.nome = "Digite o nome correto";
     }
     // CPF
     if (!formData.cpf || formData.cpf.length < 14) {
@@ -67,8 +73,21 @@ function Formulario() {
     e.preventDefault();
 
     if (validarFormulario()) {
-      console.log("Formulário válido:", formData);
-      alert("Formulário enviado com sucesso!");
+      if (isEdit) {
+        const dados = JSON.parse(localStorage.getItem("voluntarios"));
+        const updateVoluntarios = dados.map((voluntario) => {
+          if (Number(voluntario.id) === Number(id)) {
+            return formData;
+          }
+          return voluntario;
+        });
+
+        localStorage.setItem("voluntarios", JSON.stringify(updateVoluntarios));
+        return;
+      }
+      const dados = JSON.parse(localStorage.getItem("voluntarios")) || [];
+      const updateVoluntarios = [...dados, formData];
+      localStorage.setItem("voluntarios", JSON.stringify(updateVoluntarios));
     } else {
       console.log("Erros:", errors);
     }
@@ -76,6 +95,7 @@ function Formulario() {
 
   const handleReset = () => {
     setFormData({
+      id: null,
       nome: "",
       cpf: "",
       email: "",
@@ -90,6 +110,19 @@ function Formulario() {
           {isEdit ? "Editar Voluntário" : "Dados Voluntários"}
         </h3>
 
+        <Form.Group className="mb-1">
+          <Form.Label>ID</Form.Label>
+          <Form.Control
+            type="text"
+            name="id"
+            value={formData.id}
+            onChange={handleChange}
+            isInvalid={!!errors.id}
+          />
+          <Form.Control.Feedback type="invalid">
+            {errors.id}
+          </Form.Control.Feedback>
+        </Form.Group>
         <Form.Group className="mb-1">
           <Form.Label>Nome</Form.Label>
           <Form.Control
@@ -154,17 +187,6 @@ function Formulario() {
           <Form.Control as="textarea" rows={3} />
         </Form.Group>
 
-        <Form.Group className="mb-3">
-          <FormCheck
-            type="checkbox"
-            label="Aceito receber comunicados por e-mail"
-          ></FormCheck>
-          <FormCheck
-            type="checkbox"
-            label="Li e concordo com os Termos de Voluntário"
-          ></FormCheck>
-        </Form.Group>
-
         <div className="opcao-form">
           <Button
             type="reset"
@@ -175,7 +197,7 @@ function Formulario() {
             Resetar
           </Button>
           <Button type="submit" variant="success" className="btn-form">
-            Enviar
+            {isEdit ? "Salvar" : "Cadastrar"}
           </Button>
         </div>
       </Form>
