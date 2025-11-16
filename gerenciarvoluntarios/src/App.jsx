@@ -8,24 +8,6 @@ import "./app.css";
 function App() {
   return (
     <BrowserRouter>
-      <nav className="navbar navbar-expand-lg navbar-dark bg-dark">
-        <div className="container">
-          <Link className="navbar-brand" to="/">
-            Home
-          </Link>
-          <div className="navbar-nav">
-            <Link className="nav-link" to="/cadastrodevoluntarios">
-              Cadastro de Voluntários
-            </Link>
-          </div>
-          <div className="navbar-nav">
-            <Link className="nav-link" to="/listadevoluntarios">
-              Lista de Voluntários
-            </Link>
-          </div>
-        </div>
-      </nav>
-
       <Routes>
         <Route path="/" element={<div>Ola</div>} />
         <Route

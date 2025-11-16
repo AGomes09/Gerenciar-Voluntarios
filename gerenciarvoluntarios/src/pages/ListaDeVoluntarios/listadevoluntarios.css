@@ -1,3 +1,23 @@
 .main {
   flex: 1;
+  width: 100%;
+}
+
+.empty-list {
+  min-height: 70vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.empty-message {
+  font-size: 1.3rem;
+  font-weight: 500;
+  color: #555;
+  background: #f8f9fa;
+  padding: 15px 25px;
+  border-radius: 10px;
+  border: 1px solid #ddd;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
 }
