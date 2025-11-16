@@ -118,7 +118,7 @@ function ListaDeVoluntarios() {
           autohide
           bg="danger"
         >
-          <Toast.Body className="text-white">
+          <Toast.Body className="text-white text-center">
             {`Voluntário Excluído com Sucesso!!`}
           </Toast.Body>
         </Toast>

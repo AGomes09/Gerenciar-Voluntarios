@@ -109,7 +109,7 @@ function Formulario() {
 
   const handleReset = () => {
     setFormData({
-      id: null,
+      id: "",
       nome: "",
       cpf: "",
       email: "",
@@ -234,7 +234,7 @@ function Formulario() {
           autohide
           bg="success"
         >
-          <Toast.Body className="text-white">
+          <Toast.Body className="text-white text-center">
             {`Voluntário ${isEdit ? "Editado" : "Cadastrado"} com Sucesso!!`}
           </Toast.Body>
         </Toast>
