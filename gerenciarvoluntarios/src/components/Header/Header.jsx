@@ -1,6 +1,7 @@
+import { Container } from "react-bootstrap";
+import { Link } from "react-router-dom";
 import NavBar from "../NavBar/NavBar.jsx";
 import Stack from "react-bootstrap/Stack";
-import { Container } from "react-bootstrap";
 import "./header.css";
 function Header({ title, background }) {
   return (
@@ -15,13 +16,9 @@ function Header({ title, background }) {
         <Container className="d-flex justify-content-center gap-5">
           <div>
             <button type="button" className="btn btn-semborda btn-cadastro">
-              <i class="bi bi-plus-lg"></i> NOVO VOLUNTÁRIO
-            </button>
-          </div>
-
-          <div>
-            <button type="button" className="btn btn-semborda btn-atualizar">
-              <i class="bi bi-plus-lg"></i> ATUALIZAR
+              <Link className="nav-link" to="/cadastrodevoluntarios">
+                <i class="bi bi-plus-lg"></i> NOVO VOLUNTÁRIO
+              </Link>
             </button>
           </div>
 
@@ -31,7 +28,9 @@ function Header({ title, background }) {
               className="btn btn-semborda btn-lista-voluntarios"
               width="200"
             >
-              <i class="bi bi-plus-lg"></i> LISTA DE VOLUNTÁRIOS
+              <Link className="nav-link" to="/listadevoluntarios">
+                <i class="bi bi-plus-lg"></i> LISTA DE VOLUNTÁRIOS
+              </Link>
             </button>
           </div>
         </Container>

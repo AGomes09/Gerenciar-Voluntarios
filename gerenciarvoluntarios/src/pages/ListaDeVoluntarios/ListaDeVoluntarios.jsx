@@ -4,11 +4,16 @@ import { Link } from "react-router-dom";
 
 import Header from "src/components/Header/Header.jsx";
 import Table from "react-bootstrap/Table";
-
+import Toast from "react-bootstrap/Toast";
+import ToastContainer from "react-bootstrap/ToastContainer";
 import "./listadevoluntarios.css";
 
 function ListaDeVoluntarios() {
   const [voluntarios, setVoluntarios] = useState([]);
+  const [search, setSearch] = useState("");
+  const [showToast, setShowToast] = useState(false);
+
+  const toggleShowToast = () => setShowToast(!showToast);
 
   useEffect(() => {
     const dados = JSON.parse(localStorage.getItem("voluntarios"));
@@ -17,16 +22,55 @@ function ListaDeVoluntarios() {
     }
   }, []);
 
-  if (!voluntarios.length) {
-    return <div>teste</div>;
-  }
+  const handleExcluirChange = (id) => {
+    const dados = JSON.parse(localStorage.getItem("voluntarios"));
+    const updateVoluntarios = dados.filter((voluntario) => {
+      return Number(voluntario.id) != Number(id);
+    });
+    setVoluntarios(updateVoluntarios);
+    toggleShowToast();
+  };
 
+  if (!voluntarios.length) {
+    return (
+      <>
+        <Header title="Lista de Voluntários" background="#7BB1E2" />
+        <main className="empty-list">
+          <p className="empty-message">Nenhum voluntário cadastrado</p>
+        </main>
+      </>
+    );
+  }
+  const voluntariosFiltrados = voluntarios.filter(
+    (v) =>
+      v.nome.toLowerCase().includes(search.toLowerCase()) ||
+      v.cpf.toLowerCase().includes(search.toLowerCase()) ||
+      v.email.toLowerCase().includes(search.toLowerCase()) ||
+      v.telefone.toLowerCase().includes(search.toLowerCase()) ||
+      String(v.id).includes(search)
+  );
   return (
     <>
       <Header title="Lista de Voluntários" background="#7BB1E2" />
+
       <main className="d-flex flex-column min-vh-100">
-        <div className="main">
-          <Table striped bordered hover responsive className="mt-5 ">
+        <div className="d-flex justify-content-center mt-4">
+          <input
+            type="text"
+            placeholder="Pesquisar..."
+            className="form-control w-50"
+            value={search}
+            onChange={(e) => setSearch(e.target.value)}
+          />
+        </div>
+        <div className="main d-flex justify-content-center">
+          <Table
+            striped
+            bordered
+            hover
+            responsive
+            className="mt-5 text-center w-100"
+          >
             <thead>
               <tr>
                 <th>ID</th>
@@ -38,7 +82,7 @@ function ListaDeVoluntarios() {
               </tr>
             </thead>
             <tbody>
-              {voluntarios.map((voluntario) => (
+              {voluntariosFiltrados.map((voluntario) => (
                 <tr key={voluntario.id}>
                   <td>{voluntario.id}</td>
                   <td>{voluntario.nome}</td>
@@ -52,7 +96,11 @@ function ListaDeVoluntarios() {
                     >
                       Editar
                     </Link>
-                    <Button variant="danger" size="sm">
+                    <Button
+                      variant="danger"
+                      size="sm"
+                      onClick={() => handleExcluirChange(voluntario.id)}
+                    >
                       Excluir
                     </Button>
                   </td>
@@ -62,6 +110,19 @@ function ListaDeVoluntarios() {
           </Table>
         </div>
       </main>
+      <ToastContainer position="bottom-center">
+        <Toast
+          show={showToast}
+          onClose={() => setShowToast(false)}
+          delay={3000}
+          autohide
+          bg="danger"
+        >
+          <Toast.Body className="text-white">
+            {`Voluntário Excluído com Sucesso!!`}
+          </Toast.Body>
+        </Toast>
+      </ToastContainer>
     </>
   );
 }

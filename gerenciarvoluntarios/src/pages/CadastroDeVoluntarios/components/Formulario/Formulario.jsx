@@ -2,6 +2,8 @@ import { useEffect, useState } from "react";
 import { Container, FormCheck, Button, Form } from "react-bootstrap";
 import { aplicarMascaraCpf, aplicarMascaraTelefone } from "src/utils/mascaras";
 import { useParams } from "react-router-dom";
+import Toast from "react-bootstrap/Toast";
+import ToastContainer from "react-bootstrap/ToastContainer";
 import "./formulario.css";
 
 function Formulario() {
@@ -14,9 +16,12 @@ function Formulario() {
     cpf: "",
     email: "",
     telefone: "",
+    disponibilidade: "",
   });
-
+  const [showToast, setShowToast] = useState(false);
   const [errors, setErrors] = useState({});
+
+  const toggleShowToast = () => setShowToast(!showToast);
   useEffect(() => {
     if (isEdit) {
       const dados = JSON.parse(localStorage.getItem("voluntarios"));
@@ -44,9 +49,13 @@ function Formulario() {
 
   const validarFormulario = () => {
     const novosErros = {};
+
+    // ID
     if (!formData.id) {
-      novosErros.nome = "Digite o id";
+      novosErros.id = "Digite o ID";
     }
+
+    // Nome
     if (!formData.nome || formData.nome.length < 3) {
       novosErros.nome = "Digite o nome correto";
     }
@@ -65,13 +74,17 @@ function Formulario() {
       novosErros.telefone = "Telefone inválido";
     }
 
+    // Disponibilidade
+    if (!formData.disponibilidade) {
+      novosErros.disponibilidade = "Coloque a sua disponibilidade";
+    }
+
     setErrors(novosErros);
     return Object.keys(novosErros).length === 0; // true se estiver tudo certo
   };
 
   const handleSubmit = (e) => {
     e.preventDefault();
-
     if (validarFormulario()) {
       if (isEdit) {
         const dados = JSON.parse(localStorage.getItem("voluntarios"));
@@ -83,13 +96,14 @@ function Formulario() {
         });
 
         localStorage.setItem("voluntarios", JSON.stringify(updateVoluntarios));
+        toggleShowToast();
         return;
       }
       const dados = JSON.parse(localStorage.getItem("voluntarios")) || [];
       const updateVoluntarios = [...dados, formData];
       localStorage.setItem("voluntarios", JSON.stringify(updateVoluntarios));
-    } else {
-      console.log("Erros:", errors);
+      toggleShowToast();
+      handleReset();
     }
   };
 
@@ -100,6 +114,7 @@ function Formulario() {
       cpf: "",
       email: "",
       telefone: "",
+      disponibilidade: "",
     });
     setErrors({});
   };
@@ -184,7 +199,17 @@ function Formulario() {
 
         <Form.Group className="mb-1">
           <Form.Label>Qual a disponibilidade e interesse?</Form.Label>
-          <Form.Control as="textarea" rows={3} />
+          <Form.Control
+            as="textarea"
+            name="disponibilidade"
+            rows={3}
+            value={formData.disponibilidade}
+            onChange={handleChange}
+            isInvalid={!!errors.disponibilidade}
+          />
+          <Form.Control.Feedback type="invalid">
+            {errors.disponibilidade}
+          </Form.Control.Feedback>
         </Form.Group>
 
         <div className="opcao-form">
@@ -201,6 +226,19 @@ function Formulario() {
           </Button>
         </div>
       </Form>
+      <ToastContainer position="bottom-center">
+        <Toast
+          show={showToast}
+          onClose={() => setShowToast(false)}
+          delay={3000}
+          autohide
+          bg="success"
+        >
+          <Toast.Body className="text-white">
+            {`Voluntário ${isEdit ? "Editado" : "Cadastrado"} com Sucesso!!`}
+          </Toast.Body>
+        </Toast>
+      </ToastContainer>
     </Container>
   );
 }
