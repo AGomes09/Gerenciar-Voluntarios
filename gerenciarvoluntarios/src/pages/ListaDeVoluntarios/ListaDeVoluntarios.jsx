@@ -23,11 +23,13 @@ function ListaDeVoluntarios() {
   }, []);
 
   const handleExcluirChange = (id) => {
-    const dados = JSON.parse(localStorage.getItem("voluntarios"));
-    const updateVoluntarios = dados.filter((voluntario) => {
-      return Number(voluntario.id) != Number(id);
-    });
+    const dados = JSON.parse(localStorage.getItem("voluntarios")) || [];
+
+    const updateVoluntarios = dados.filter(
+      (voluntario) => Number(voluntario.id) !== Number(id)
+    );
     setVoluntarios(updateVoluntarios);
+    localStorage.setItem("voluntarios", JSON.stringify(updateVoluntarios));
     toggleShowToast();
   };
 

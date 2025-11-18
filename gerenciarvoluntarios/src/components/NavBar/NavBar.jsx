@@ -35,7 +35,6 @@ function NavBar() {
         </div>
       </Stack>
     </>
-    //Passar o Router no Logou para ir pro Login
   );
 }
 

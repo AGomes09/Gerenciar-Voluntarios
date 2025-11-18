@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { Container, FormCheck, Button, Form } from "react-bootstrap";
+import { Container, Button, Form } from "react-bootstrap";
 import { aplicarMascaraCpf, aplicarMascaraTelefone } from "src/utils/mascaras";
 import { useParams } from "react-router-dom";
 import Toast from "react-bootstrap/Toast";
@@ -80,7 +80,7 @@ function Formulario() {
     }
 
     setErrors(novosErros);
-    return Object.keys(novosErros).length === 0; // true se estiver tudo certo
+    return Object.keys(novosErros).length === 0;
   };
 
   const handleSubmit = (e) => {
