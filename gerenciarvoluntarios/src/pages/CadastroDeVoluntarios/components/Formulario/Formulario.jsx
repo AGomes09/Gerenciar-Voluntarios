@@ -4,6 +4,7 @@ import { aplicarMascaraCpf, aplicarMascaraTelefone } from "src/utils/mascaras";
 import { useParams } from "react-router-dom";
 import Toast from "react-bootstrap/Toast";
 import ToastContainer from "react-bootstrap/ToastContainer";
+import ApiService from "../../../../services/ApiService";
 import "./formulario.css";
 
 function Formulario() {
@@ -24,15 +25,18 @@ function Formulario() {
   const toggleShowToast = () => setShowToast(!showToast);
   useEffect(() => {
     if (isEdit) {
-      const dados = JSON.parse(localStorage.getItem("voluntarios"));
-      if (dados.length) {
-        const findVoluntario = dados.find((voluntario) => {
-          return Number(voluntario.id) === Number(id);
-        });
-        if (findVoluntario) {
-          setFormData(findVoluntario);
+      ApiService.get(`/voluntarios/${id}`).then((response) => {
+        console.log(response);
+        if (response) {
+          setFormData({
+            id: response.id,
+            nome: response.vlt_nome,
+            cpf: response.vlt_cpf,
+            telefone: response.vlt_telefone,
+            email: response.vlt_email,
+          });
         }
-      }
+      });
     }
   }, [id, isEdit]);
 
@@ -86,24 +90,25 @@ function Formulario() {
   const handleSubmit = (e) => {
     e.preventDefault();
     if (validarFormulario()) {
-      if (isEdit) {
-        const dados = JSON.parse(localStorage.getItem("voluntarios"));
-        const updateVoluntarios = dados.map((voluntario) => {
-          if (Number(voluntario.id) === Number(id)) {
-            return formData;
-          }
-          return voluntario;
-        });
+      const payload = {
+        id: formData.id,
+        nome: formData.nome,
+        cpf: formData.cpf,
+        telefone: formData.telefone,
+        email: formData.email,
+      };
 
-        localStorage.setItem("voluntarios", JSON.stringify(updateVoluntarios));
-        toggleShowToast();
+      if (isEdit) {
+        ApiService.put(`/voluntarios/${id}`, payload).then(() => {
+          toggleShowToast();
+        });
         return;
       }
-      const dados = JSON.parse(localStorage.getItem("voluntarios")) || [];
-      const updateVoluntarios = [...dados, formData];
-      localStorage.setItem("voluntarios", JSON.stringify(updateVoluntarios));
-      toggleShowToast();
-      handleReset();
+
+      ApiService.post("/voluntarios", payload).then(() => {
+        toggleShowToast();
+        handleReset();
+      });
     }
   };
 

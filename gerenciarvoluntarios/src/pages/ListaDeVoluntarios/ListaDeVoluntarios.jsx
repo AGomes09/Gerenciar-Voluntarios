@@ -7,6 +7,7 @@ import Table from "react-bootstrap/Table";
 import Toast from "react-bootstrap/Toast";
 import ToastContainer from "react-bootstrap/ToastContainer";
 import "./listadevoluntarios.css";
+import ApiService from "../../services/ApiService";
 
 function ListaDeVoluntarios() {
   const [voluntarios, setVoluntarios] = useState([]);
@@ -16,21 +17,21 @@ function ListaDeVoluntarios() {
   const toggleShowToast = () => setShowToast(!showToast);
 
   useEffect(() => {
-    const dados = JSON.parse(localStorage.getItem("voluntarios"));
-    if (dados && dados.length) {
-      setVoluntarios(dados);
-    }
+    ApiService.get("/voluntarios").then((response) => {
+      if (response && response.length) {
+        setVoluntarios(response);
+      }
+    });
   }, []);
 
   const handleExcluirChange = (id) => {
-    const dados = JSON.parse(localStorage.getItem("voluntarios")) || [];
-
-    const updateVoluntarios = dados.filter(
-      (voluntario) => Number(voluntario.id) !== Number(id)
-    );
-    setVoluntarios(updateVoluntarios);
-    localStorage.setItem("voluntarios", JSON.stringify(updateVoluntarios));
-    toggleShowToast();
+    ApiService.delete(`/voluntarios/${id}`).then(() => {
+      const updateVoluntarios = voluntarios.filter(
+        (voluntario) => Number(voluntario.id) !== Number(id)
+      );
+      setVoluntarios(updateVoluntarios);
+      toggleShowToast();
+    });
   };
 
   if (!voluntarios.length) {
@@ -45,10 +46,10 @@ function ListaDeVoluntarios() {
   }
   const voluntariosFiltrados = voluntarios.filter(
     (v) =>
-      v.nome.toLowerCase().includes(search.toLowerCase()) ||
-      v.cpf.toLowerCase().includes(search.toLowerCase()) ||
-      v.email.toLowerCase().includes(search.toLowerCase()) ||
-      v.telefone.toLowerCase().includes(search.toLowerCase()) ||
+      v.vlt_nome.toLowerCase().includes(search.toLowerCase()) ||
+      v.vlt_cpf.toLowerCase().includes(search.toLowerCase()) ||
+      v.vlt_email.toLowerCase().includes(search.toLowerCase()) ||
+      v.vlt_telefone.toLowerCase().includes(search.toLowerCase()) ||
       String(v.id).includes(search)
   );
   return (
@@ -87,10 +88,10 @@ function ListaDeVoluntarios() {
               {voluntariosFiltrados.map((voluntario) => (
                 <tr key={voluntario.id}>
                   <td>{voluntario.id}</td>
-                  <td>{voluntario.nome}</td>
-                  <td>{voluntario.cpf}</td>
-                  <td>{voluntario.telefone}</td>
-                  <td>{voluntario.email}</td>
+                  <td>{voluntario.vlt_nome}</td>
+                  <td>{voluntario.vlt_cpf}</td>
+                  <td>{voluntario.vlt_telefone}</td>
+                  <td>{voluntario.vlt_email}</td>
                   <td className="d-flex gap-2">
                     <Link
                       to={`/cadastrodevoluntarios/editar/${voluntario.id}`}
