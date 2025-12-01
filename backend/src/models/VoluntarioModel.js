@@ -18,26 +18,26 @@ class Voluntario {
   }
 
   static async criar(voluntario) {
-    const { id, nome, cpf, telefone, email } = voluntario;
+    const { id, nome, cpf, telefone, email, disponibilidade } = voluntario;
     const [result] = await pool.query(
-      `INSERT INTO voluntarios (id, vlt_nome, vlt_cpf, vlt_telefone, vlt_email) VALUES (?,?,?,?,?)`,
-      [id, nome, cpf, telefone, email]
+      `INSERT INTO voluntarios (id, vlt_nome, vlt_cpf, vlt_telefone, vlt_email, vlt_disponibilidade) VALUES (?,?,?,?,?,?)`,
+      [id, nome, cpf, telefone, email, disponibilidade]
     );
-    return { id: result.insertId, nome, cpf, telefone, email };
+    return { id: result.insertId, nome, cpf, telefone, email, disponibilidade };
   }
 
   // Atualizar Voluntário
   static async atualizar(id, voluntario) {
-    const { nome, cpf, telefone, email } = voluntario;
+    const { nome, cpf, telefone, email, disponibilidade } = voluntario;
     const [result] = await pool.query(
-      `UPDATE voluntarios SET vlt_nome = ?, vlt_cpf = ?, vlt_telefone = ?, vlt_email = ? WHERE id = ?`,
-      [nome, cpf, telefone, email, id]
+      `UPDATE voluntarios SET vlt_nome = ?, vlt_cpf = ?, vlt_telefone = ?, vlt_email = ?, vlt_disponibilidade = ? WHERE id = ?`,
+      [nome, cpf, telefone, email, disponibilidade, id]
     );
 
     if (result.affectedRows === 0) {
       return null;
     }
-    return { id: result.insertId, nome, cpf, telefone, email };
+    return { id: result.insertId, nome, cpf, telefone, email, disponibilidade };
   }
 
   // Excluir Voluntário
@@ -54,8 +54,8 @@ class Voluntario {
   static async filtrar(termo) {
     const termoBusca = `%${termo}%`;
     const [rows] = await pool.query(
-      `SELECT * FROM voluntarios WHERE id like ? OR nome like ? OR cpf like ? OR telefone like ? OR email like ? ORDER BY id DESC`,
-      [termoBusca, termoBusca, termoBusca, termoBusca, termoBusca]
+      `SELECT * FROM voluntarios WHERE id like ? OR nome like ? OR cpf like ? OR telefone like ? OR email like ? OR disponibilidade like ? ORDER BY id DESC`,
+      [termoBusca, termoBusca, termoBusca, termoBusca, termoBusca, termoBusca]
     );
   }
 }
