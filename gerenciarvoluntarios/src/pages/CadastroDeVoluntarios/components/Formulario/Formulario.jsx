@@ -26,7 +26,6 @@ function Formulario() {
   useEffect(() => {
     if (isEdit) {
       ApiService.get(`/voluntarios/${id}`).then((response) => {
-        console.log(response);
         if (response) {
           setFormData({
             id: response.id,
@@ -34,6 +33,7 @@ function Formulario() {
             cpf: response.vlt_cpf,
             telefone: response.vlt_telefone,
             email: response.vlt_email,
+            disponibilidade: response.vlt_disponibilidade,
           });
         }
       });
@@ -96,6 +96,7 @@ function Formulario() {
         cpf: formData.cpf,
         telefone: formData.telefone,
         email: formData.email,
+        disponibilidade: formData.disponibilidade,
       };
 
       if (isEdit) {

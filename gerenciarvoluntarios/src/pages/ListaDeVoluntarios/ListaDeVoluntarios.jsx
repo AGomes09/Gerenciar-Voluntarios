@@ -50,6 +50,7 @@ function ListaDeVoluntarios() {
       v.vlt_cpf.toLowerCase().includes(search.toLowerCase()) ||
       v.vlt_email.toLowerCase().includes(search.toLowerCase()) ||
       v.vlt_telefone.toLowerCase().includes(search.toLowerCase()) ||
+      v.vlt_disponibilidade?.toLowerCase()?.includes(search.toLowerCase()) ||
       String(v.id).includes(search)
   );
   return (
@@ -81,6 +82,7 @@ function ListaDeVoluntarios() {
                 <th>CPF</th>
                 <th>Telefone</th>
                 <th>Email</th>
+                <th>Disponibilidade</th>
                 <th>Ações</th>
               </tr>
             </thead>
@@ -92,6 +94,7 @@ function ListaDeVoluntarios() {
                   <td>{voluntario.vlt_cpf}</td>
                   <td>{voluntario.vlt_telefone}</td>
                   <td>{voluntario.vlt_email}</td>
+                  <td>{voluntario.vlt_disponibilidade || "-"}</td>
                   <td className="d-flex gap-2">
                     <Link
                       to={`/cadastrodevoluntarios/editar/${voluntario.id}`}

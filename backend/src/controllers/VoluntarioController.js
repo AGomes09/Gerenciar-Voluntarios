@@ -39,8 +39,8 @@ class VoluntarioController {
 
   static async criar(req, res) {
     try {
-      const { id, nome, cpf, telefone, email } = req.body;
-      if (!id || !nome || !cpf || !telefone || !email) {
+      const { id, nome, cpf, telefone, email, disponibilidade } = req.body;
+      if (!id || !nome || !cpf || !telefone || !email || !disponibilidade) {
         return res
           .status(404)
           .json({ error: "Todos os campos são obrigatórios" });
@@ -63,6 +63,7 @@ class VoluntarioController {
         cpf,
         telefone,
         email,
+        disponibilidade,
       });
       res.status(201).json(voluntario);
     } catch (error) {
@@ -75,7 +76,7 @@ class VoluntarioController {
   static async atualizar(req, res) {
     try {
       const { id } = req.params;
-      const { nome, cpf, telefone, email } = req.body;
+      const { nome, cpf, telefone, email, disponibilidade } = req.body;
 
       if (!aplicarMascaraCpf(cpf)) {
         return res.status(400).json({
@@ -94,6 +95,7 @@ class VoluntarioController {
         cpf,
         telefone,
         email,
+        disponibilidade,
       });
 
       res.status(201).json(voluntario);
