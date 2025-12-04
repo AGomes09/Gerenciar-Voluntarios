@@ -4,7 +4,7 @@ class Voluntario {
   //Listar todos voluntários
   static async listarTodos() {
     const [rows] = await pool.query(
-      "SELECT * FROM voluntarios order by id desc"
+      "SELECT * FROM voluntarios order by vlt_nome "
     );
     return rows;
   }
