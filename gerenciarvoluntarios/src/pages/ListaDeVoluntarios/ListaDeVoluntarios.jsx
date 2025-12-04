@@ -158,7 +158,7 @@ const confirmarExclusao = () => {
           <Button variant="secondary" onClick={() => setShowModal(false)}>
             Cancelar
           </Button>
-          <Button variant="primary" onClick={confirmarExclusao}>Excluir</Button>
+          <Button variant="danger" onClick={confirmarExclusao}>Excluir</Button>
         </Modal.Footer>
       </Modal>
     </>
