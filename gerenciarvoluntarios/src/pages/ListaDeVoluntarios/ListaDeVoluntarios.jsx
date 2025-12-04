@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { Button } from "react-bootstrap";
 import { Link } from "react-router-dom";
-
+import Modal from 'react-bootstrap/Modal';
 import Header from "src/components/Header/Header.jsx";
 import Table from "react-bootstrap/Table";
 import Toast from "react-bootstrap/Toast";
@@ -13,6 +13,9 @@ function ListaDeVoluntarios() {
   const [voluntarios, setVoluntarios] = useState([]);
   const [search, setSearch] = useState("");
   const [showToast, setShowToast] = useState(false);
+  const [showModal, setShowModal] = useState(false);
+  const [idParaExcluir, setIdParaExcluir] = useState(null);
+
 
   const toggleShowToast = () => setShowToast(!showToast);
 
@@ -33,6 +36,16 @@ function ListaDeVoluntarios() {
       toggleShowToast();
     });
   };
+
+ const abrirModal = (id) => {
+  setIdParaExcluir(id);
+  setShowModal(true);
+};
+
+const confirmarExclusao = () => {
+  handleExcluirChange(idParaExcluir);
+  setShowModal(false);
+};
 
   if (!voluntarios.length) {
     return (
@@ -105,7 +118,7 @@ function ListaDeVoluntarios() {
                     <Button
                       variant="danger"
                       size="sm"
-                      onClick={() => handleExcluirChange(voluntario.id)}
+                      onClick={() => abrirModal(voluntario.id)}
                     >
                       Excluir
                     </Button>
@@ -129,6 +142,25 @@ function ListaDeVoluntarios() {
           </Toast.Body>
         </Toast>
       </ToastContainer>
+      <Modal
+        show={showModal}
+        onHide={() => setShowModal(false)}
+        backdrop="static"
+        keyboard={false}
+      >
+        <Modal.Header closeButton>
+          <Modal.Title>Confirmar Exclusão</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+          Realmente Deseja excluir este voluntário ?
+        </Modal.Body>
+        <Modal.Footer>
+          <Button variant="secondary" onClick={() => setShowModal(false)}>
+            Cancelar
+          </Button>
+          <Button variant="primary" onClick={confirmarExclusao}>Excluir</Button>
+        </Modal.Footer>
+      </Modal>
     </>
   );
 }
