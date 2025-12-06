@@ -7,14 +7,7 @@ import {
 class VoluntarioController {
   static async listar(req, res) {
     try {
-      const { termo } = req.query;
-      let voluntarios;
-
-      if (termo) {
-        voluntarios = await VoluntarioModel.filtrar(termo);
-      } else {
-        voluntarios = await VoluntarioModel.listarTodos();
-      }
+      const voluntarios = await VoluntarioModel.listarTodos();
 
       res.json(voluntarios);
     } catch (error) {
@@ -39,8 +32,22 @@ class VoluntarioController {
 
   static async criar(req, res) {
     try {
-      const { id, nome, cpf, telefone, email, disponibilidade } = req.body;
-      if (!id || !nome || !cpf || !telefone || !email || !disponibilidade) {
+      const {
+        nome,
+        cpf,
+        telefone,
+        vlt_tel_Residencial,
+        email,
+        disponibilidade,
+      } = req.body;
+      if (
+        !nome ||
+        !cpf ||
+        !telefone ||
+        !vlt_tel_Residencial ||
+        !email ||
+        !disponibilidade
+      ) {
         return res
           .status(404)
           .json({ error: "Todos os campos são obrigatórios" });
@@ -58,25 +65,31 @@ class VoluntarioController {
       }
 
       const voluntario = await VoluntarioModel.criar({
-        id,
         nome,
         cpf,
         telefone,
+        vlt_tel_Residencial,
         email,
         disponibilidade,
       });
       res.status(201).json(voluntario);
     } catch (error) {
       console.error(`Erro ao cadastrar voluntário ${error}`);
+      return res.status(500).json({ error: "Erro ao cadastrar voluntário" });
     }
-
-    res.status(500).json({ error: "Erro ao cadastrar voluntário" });
   }
 
   static async atualizar(req, res) {
     try {
       const { id } = req.params;
-      const { nome, cpf, telefone, email, disponibilidade } = req.body;
+      const {
+        nome,
+        cpf,
+        telefone,
+        vlt_tel_Residencial,
+        email,
+        disponibilidade,
+      } = req.body;
 
       if (!aplicarMascaraCpf(cpf)) {
         return res.status(400).json({
@@ -94,6 +107,7 @@ class VoluntarioController {
         nome,
         cpf,
         telefone,
+        vlt_tel_Residencial,
         email,
         disponibilidade,
       });
