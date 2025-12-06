@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { Button } from "react-bootstrap";
 import { Link } from "react-router-dom";
-import Modal from 'react-bootstrap/Modal';
+import Modal from "react-bootstrap/Modal";
 import Header from "src/components/Header/Header.jsx";
 import Table from "react-bootstrap/Table";
 import Toast from "react-bootstrap/Toast";
@@ -15,7 +15,6 @@ function ListaDeVoluntarios() {
   const [showToast, setShowToast] = useState(false);
   const [showModal, setShowModal] = useState(false);
   const [idParaExcluir, setIdParaExcluir] = useState(null);
-
 
   const toggleShowToast = () => setShowToast(!showToast);
 
@@ -37,15 +36,15 @@ function ListaDeVoluntarios() {
     });
   };
 
- const abrirModal = (id) => {
-  setIdParaExcluir(id);
-  setShowModal(true);
-};
+  const abrirModal = (id) => {
+    setIdParaExcluir(id);
+    setShowModal(true);
+  };
 
-const confirmarExclusao = () => {
-  handleExcluirChange(idParaExcluir);
-  setShowModal(false);
-};
+  const confirmarExclusao = () => {
+    handleExcluirChange(idParaExcluir);
+    setShowModal(false);
+  };
 
   if (!voluntarios.length) {
     return (
@@ -63,6 +62,7 @@ const confirmarExclusao = () => {
       v.vlt_cpf.toLowerCase().includes(search.toLowerCase()) ||
       v.vlt_email.toLowerCase().includes(search.toLowerCase()) ||
       v.vlt_telefone.toLowerCase().includes(search.toLowerCase()) ||
+      v.vlt_tel_Residencial.toLowerCase().includes(search.toLowerCase()) ||
       v.vlt_disponibilidade?.toLowerCase()?.includes(search.toLowerCase()) ||
       String(v.id).includes(search)
   );
@@ -93,7 +93,8 @@ const confirmarExclusao = () => {
                 <th>ID</th>
                 <th>Nome</th>
                 <th>CPF</th>
-                <th>Telefone</th>
+                <th>Telefone Celular</th>
+                <th>Telefone Residencial</th>
                 <th>Email</th>
                 <th>Disponibilidade</th>
                 <th>Ações</th>
@@ -106,6 +107,7 @@ const confirmarExclusao = () => {
                   <td>{voluntario.vlt_nome}</td>
                   <td>{voluntario.vlt_cpf}</td>
                   <td>{voluntario.vlt_telefone}</td>
+                  <td>{voluntario.vlt_tel_Residencial}</td>
                   <td>{voluntario.vlt_email}</td>
                   <td>{voluntario.vlt_disponibilidade || "-"}</td>
                   <td className="d-flex gap-2">
@@ -151,14 +153,14 @@ const confirmarExclusao = () => {
         <Modal.Header closeButton>
           <Modal.Title>Confirmar Exclusão</Modal.Title>
         </Modal.Header>
-        <Modal.Body>
-          Realmente Deseja excluir este voluntário ?
-        </Modal.Body>
+        <Modal.Body>Realmente Deseja excluir este voluntário ?</Modal.Body>
         <Modal.Footer>
           <Button variant="secondary" onClick={() => setShowModal(false)}>
             Cancelar
           </Button>
-          <Button variant="danger" onClick={confirmarExclusao}>Excluir</Button>
+          <Button variant="danger" onClick={confirmarExclusao}>
+            Excluir
+          </Button>
         </Modal.Footer>
       </Modal>
     </>

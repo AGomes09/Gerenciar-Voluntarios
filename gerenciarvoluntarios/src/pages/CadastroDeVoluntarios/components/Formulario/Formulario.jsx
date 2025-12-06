@@ -1,6 +1,10 @@
 import { useEffect, useState } from "react";
 import { Container, Button, Form } from "react-bootstrap";
-import { aplicarMascaraCpf, aplicarMascaraTelefone } from "src/utils/mascaras";
+import {
+  aplicarMascaraCpf,
+  aplicarMascaraTelefone,
+  formatarTelefoneFixo,
+} from "src/utils/mascaras";
 import { useParams } from "react-router-dom";
 import Toast from "react-bootstrap/Toast";
 import ToastContainer from "react-bootstrap/ToastContainer";
@@ -17,6 +21,7 @@ function Formulario() {
     cpf: "",
     email: "",
     telefone: "",
+    vlt_tel_Residencial: "",
     disponibilidade: "",
   });
   const [showToast, setShowToast] = useState(false);
@@ -32,6 +37,7 @@ function Formulario() {
             nome: response.vlt_nome,
             cpf: response.vlt_cpf,
             telefone: response.vlt_telefone,
+            vlt_tel_Residencial: response.vlt_tel_Residencial,
             email: response.vlt_email,
             disponibilidade: response.vlt_disponibilidade,
           });
@@ -47,17 +53,13 @@ function Formulario() {
 
     if (name === "cpf") newValue = aplicarMascaraCpf(value);
     if (name === "telefone") newValue = aplicarMascaraTelefone(value);
+    if (name === "vlt_tel_Residencial") newValue = formatarTelefoneFixo(value);
 
     setFormData({ ...formData, [name]: newValue });
   };
 
   const validarFormulario = () => {
     const novosErros = {};
-
-    // ID
-    if (!formData.id) {
-      novosErros.id = "Digite o ID";
-    }
 
     // Nome
     if (!formData.nome || formData.nome.length < 3) {
@@ -78,6 +80,14 @@ function Formulario() {
       novosErros.telefone = "Telefone inválido";
     }
 
+    // Telefone Residencial
+    if (
+      !formData.vlt_tel_Residencial ||
+      formData.vlt_tel_Residencial.length < 13
+    ) {
+      novosErros.vlt_tel_Residencial = "Telefone Residencial inválido";
+    }
+
     // Disponibilidade
     if (!formData.disponibilidade) {
       novosErros.disponibilidade = "Coloque a sua disponibilidade";
@@ -91,10 +101,10 @@ function Formulario() {
     e.preventDefault();
     if (validarFormulario()) {
       const payload = {
-        id: formData.id,
         nome: formData.nome,
         cpf: formData.cpf,
         telefone: formData.telefone,
+        vlt_tel_Residencial: formData.vlt_tel_Residencial,
         email: formData.email,
         disponibilidade: formData.disponibilidade,
       };
@@ -120,6 +130,7 @@ function Formulario() {
       cpf: "",
       email: "",
       telefone: "",
+      vlt_tel_Residencial: "",
       disponibilidade: "",
     });
     setErrors({});
@@ -131,19 +142,6 @@ function Formulario() {
           {isEdit ? "Editar Voluntário" : "Dados Voluntários"}
         </h3>
 
-        <Form.Group className="mb-1">
-          <Form.Label>ID</Form.Label>
-          <Form.Control
-            type="text"
-            name="id"
-            value={formData.id}
-            onChange={handleChange}
-            isInvalid={!!errors.id}
-          />
-          <Form.Control.Feedback type="invalid">
-            {errors.id}
-          </Form.Control.Feedback>
-        </Form.Group>
         <Form.Group className="mb-1">
           <Form.Label>Nome</Form.Label>
           <Form.Control
@@ -174,7 +172,7 @@ function Formulario() {
         </Form.Group>
 
         <Form.Group className="mb-1">
-          <Form.Label>Telefone</Form.Label>
+          <Form.Label>Telefone Celular</Form.Label>
           <Form.Control
             type="text"
             name="telefone"
@@ -185,6 +183,22 @@ function Formulario() {
           />
           <Form.Control.Feedback type="invalid">
             {errors.telefone}
+          </Form.Control.Feedback>
+        </Form.Group>
+
+        <Form.Group className="mb-1">
+          <Form.Label>Telefone Residencial</Form.Label>
+          <Form.Control
+            type="text"
+            name="vlt_tel_Residencial"
+            value={formData.vlt_tel_Residencial}
+            onChange={handleChange}
+            isInvalid={!!errors.vlt_tel_Residencial}
+            placeholder="(14) 3699-9999"
+            maxLength={14}
+          />
+          <Form.Control.Feedback type="invalid">
+            {errors.vlt_tel_Residencial}
           </Form.Control.Feedback>
         </Form.Group>
 
@@ -204,7 +218,7 @@ function Formulario() {
         </Form.Group>
 
         <Form.Group className="mb-1">
-          <Form.Label>Qual a disponibilidade e interesse?</Form.Label>
+          <Form.Label>Qual a disponibilidade?</Form.Label>
           <Form.Control
             as="textarea"
             name="disponibilidade"

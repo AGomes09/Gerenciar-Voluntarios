@@ -3,7 +3,6 @@ import VoluntarioController from "../controllers/VoluntarioController.js";
 
 const router = express.Router();
 
-//Rotas
 router.get("/voluntarios", VoluntarioController.listar);
 router.get("/voluntarios/:id", VoluntarioController.buscarPorId);
 router.post("/voluntarios", VoluntarioController.criar);

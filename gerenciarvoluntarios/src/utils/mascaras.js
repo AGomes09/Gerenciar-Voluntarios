@@ -24,3 +24,19 @@ export const validarTelefone = (valor) => {
   const somenteNumeros = valor.replace(/\D/g, "");
   return /^(\d{10,11})$/.test(somenteNumeros);
 };
+
+export const formatarTelefoneFixo = (numero) => {
+  const digits = numero.replace(/\D/g, "");
+
+  const regexFixo = /^[1-9]{2}[2-5]\d{7}$/;
+
+  if (!regexFixo.test(digits)) {
+    return null;
+  }
+
+  const ddd = digits.substring(0, 2);
+  const parte1 = digits.substring(2, 6);
+  const parte2 = digits.substring(6);
+
+  return `(${ddd}) ${parte1}-${parte2}`;
+};
